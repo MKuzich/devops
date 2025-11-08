@@ -1,3 +1,43 @@
+# lesson-7 — Kubernetes + Helm Deployment
+
+## Опис
+
+Проєкт розгортає Django-застосунок у Kubernetes (EKS) з використанням Helm:
+
+- Створює EKS кластер у існуючій VPC
+- Використовує ECR для зберігання Docker-образу
+- Розгортає застосунок через Helm (Deployment, Service, HPA, ConfigMap)
+- HPA масштабує кількість подів від 2 до 6 при навантаженні CPU > 70%
+- Service типу LoadBalancer забезпечує зовнішній доступ
+
+## Швидкий старт
+
+1. Переконайтеся, що Docker-образ Django завантажено в ECR
+2. Налаштуйте `kubectl` для доступу до EKS:
+   ```bash
+   aws eks update-kubeconfig --region eu-central-1 --name eks-cluster-lesson-7
+   ```
+3. Встановіть Helm chart:
+   ```bash
+   helm install myapp ./charts/django-app -f ./charts/django-app/values.yaml
+   ```
+4. Перевірка ресурсів:
+   ```bash
+   kubectl get all
+   kubectl get hpa
+   ```
+5. Оновлення Helm chart:
+   ```bash
+   helm upgrade myapp ./charts/django-app -f ./charts/django-app/values.yaml
+   ```
+6. Видалення застосунку:
+   ```bash
+   helm uninstall myapp
+   ```
+
+![alt text](image.png)
+![alt text](image-1.png)
+
 # lesson-5 — Terraform (S3 backend, VPC, ECR)
 
 ## Опис

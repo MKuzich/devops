@@ -27,7 +27,7 @@ module "eks" {
   source          = "./modules/eks"          
   cluster_name    = "eks-cluster-lesson-7"        
   subnet_ids      = module.vpc.public_subnets   
-  instance_type   = "t2.micro"                    
+  instance_type   = "t3.micro"                    
   desired_size    = 1                          
   max_size        = 2                           
   min_size        = 1                       
