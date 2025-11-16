@@ -1,6 +1,6 @@
 image:
-  repository: your-registry/your-django-image
-  tag: latest
+  repository: 471546218744.dkr.ecr.eu-central-1.amazonaws.com/lesson-5-ecr
+  tag: v1.0.7
   pullPolicy: IfNotPresent
 
 service:
