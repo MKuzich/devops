@@ -47,3 +47,19 @@ output "eks_node_role_arn" {
   description = "IAM role ARN for EKS Worker Nodes"
   value       = module.eks.eks_node_role_arn
 }
+
+output "jenkins_release" {
+  value = module.jenkins.jenkins_release_name
+}
+
+output "jenkins_namespace" {
+  value = module.jenkins.jenkins_namespace
+}
+
+output "eks_endpoint" {
+  value = data.aws_eks_cluster.eks.endpoint
+}
+
+output "eks_ca" {
+  value = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+}

@@ -1,3 +1,19 @@
+# lesson 8-9 - Jenkins + ArgoCD
+
+## Опис
+
+Проєкт автоматизує CI/CD процес для Django-застосунку з використанням Jenkins та ArgoCD:
+
+- Jenkins виконує збірку Docker-образу та пушить його в ECR
+- ArgoCD автоматично розгортає застосунок у EKS кластері при зміні Helm chart у Git репозиторії
+- Використовує Webhook для тригера Jenkins при пуші в Git
+
+## Швидкий старт
+
+1. Додайте github_user та github_pat в terraform.tfvars
+
+![alt text](image.png)
+
 # lesson-7 — Kubernetes + Helm Deployment
 
 ## Опис
@@ -34,9 +50,6 @@
    ```bash
    helm uninstall myapp
    ```
-
-![alt text](image.png)
-![alt text](image-1.png)
 
 # lesson-5 — Terraform (S3 backend, VPC, ECR)
 

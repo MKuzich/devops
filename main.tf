@@ -27,8 +27,78 @@ module "eks" {
   source          = "./modules/eks"          
   cluster_name    = "eks-cluster-lesson-7"        
   subnet_ids      = module.vpc.public_subnets   
-  instance_type   = "t3.micro"                    
-  desired_size    = 1                          
-  max_size        = 2                           
-  min_size        = 1                       
+  instance_type   = "t3.small"                    
+  desired_size    = 4                          
+  max_size        = 12                           
+  min_size        = 2                       
 }
+
+
+data "aws_eks_cluster" "eks" {
+  name = module.eks.eks_cluster_name
+
+  depends_on = [
+    module.eks
+  ]
+}
+
+data "aws_eks_cluster_auth" "eks" {
+  name = module.eks.eks_cluster_name
+
+  depends_on = [
+    module.eks
+  ]
+}
+
+
+# provider "kubernetes" {
+#   alias                  = "eks"
+#   host                   = data.aws_eks_cluster.eks.endpoint
+#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+#   token                  = data.aws_eks_cluster_auth.eks.token
+# }
+
+
+# provider "helm" {
+#   kubernetes = {
+#     host                   = data.aws_eks_cluster.eks.endpoint
+#     cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+#     token                  = data.aws_eks_cluster_auth.eks.token
+#   }
+# }
+
+
+provider "kubernetes" {
+  config_path = "~/.kube/config"
+}
+
+provider "helm" {
+  kubernetes = {
+    config_path = "~/.kube/config"
+  }
+}
+
+
+module "jenkins" {
+  source            = "./modules/jenkins"
+  cluster_name      = module.eks.eks_cluster_name
+  providers = {
+    helm = helm
+  }
+  oidc_provider_url = module.eks.oidc_provider_url
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  
+  depends_on = [
+    module.eks
+  ]
+
+  github_user = var.github_user
+  github_pat  = var.github_pat
+}
+
+module "argo_cd" {
+  source       = "./modules/argo-cd"
+  namespace    = "argocd"
+  chart_version = "5.46.4"
+}
+
