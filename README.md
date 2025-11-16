@@ -8,16 +8,44 @@
 - ArgoCD автоматично розгортає застосунок у EKS кластері при зміні Helm chart у Git репозиторії
 - Використовує Webhook для тригера Jenkins при пуші в Git
 
-## Швидкий старт
+## 1. Застосування Terraform
 
 1. Додайте github_user та github_pat в terraform.tfvars
+2. Ініціалізувати Terraform:
+   ```bash
+   terraform init
+   ```
+   Перевірити конфігурацію:
 
-   ![alt text](image-2.png)
-   ![alt text](image-1.png)
-   ![alt text](image-5.png)
-   ![alt text](image-3.png)
-   ![alt text](image-4.png)
-   ![alt text](image-6.png)
+```bash
+terraform validate
+terraform plan
+```
+
+Застосувати інфраструктуру:
+
+```bash
+terraform apply
+```
+
+## 2. Перевірка Jenkins job
+
+1. Зробити зміни в коді Django-застосунку (наприклад, змінити текст на головній сторінці) і запушити їх у Git репозиторій.
+2. Запустити Jenkins job.
+3. Перевірити, що новий Docker-образ зібрано та запушено в ECR.
+
+## 3. Перегляд результатів в Argo CD
+
+1. Відкрити Argo CD UI.
+2. Знайти застосунок, створений для Django-застосунку.
+3. Перевірити, що застосунок синхронізовано з останніми змінами в Helm chart.
+
+![alt text](image-2.png)
+![alt text](image-1.png)
+![alt text](image-5.png)
+![alt text](image-3.png)
+![alt text](image-4.png)
+![alt text](image-6.png)
 
 # lesson-7 — Kubernetes + Helm Deployment
 
