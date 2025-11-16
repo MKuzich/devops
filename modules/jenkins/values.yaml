@@ -38,6 +38,7 @@ controller:
     create: false
 
   JCasC:
+    defaultConfig: true
     configScripts:
       credentials: |
         credentials:
