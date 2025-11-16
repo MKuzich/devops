@@ -28,8 +28,8 @@ spec:
   }
 
   environment {
-    ECR_REGISTRY = "471546218744.dkr.ecr.eu-central-1.amazonaws.com/lesson-5-ecr"
-    IMAGE_NAME   = "app"
+    ECR_REGISTRY = "471546218744.dkr.ecr.eu-central-1.amazonaws.com"
+    IMAGE_NAME   = "lesson-5-ecr"
     IMAGE_TAG    = "v1.0.${BUILD_NUMBER}"
 
     COMMIT_EMAIL = "jenkins@localhost"
