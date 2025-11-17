@@ -1,3 +1,8 @@
+# Final project - Monitoring + RDS + EKS + CI/CD
+
+![alt text](image-7.png)
+![alt text](image-8.png)
+
 # lesson 10 - RDS (PostgreSQL)
 
 ## Опис
