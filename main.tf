@@ -51,32 +51,32 @@ data "aws_eks_cluster_auth" "eks" {
 }
 
 
-# provider "kubernetes" {
-#   alias                  = "eks"
-#   host                   = data.aws_eks_cluster.eks.endpoint
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-#   token                  = data.aws_eks_cluster_auth.eks.token
-# }
-
-
-# provider "helm" {
-#   kubernetes = {
-#     host                   = data.aws_eks_cluster.eks.endpoint
-#     cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-#     token                  = data.aws_eks_cluster_auth.eks.token
-#   }
-# }
-
-
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  alias                  = "eks"
+  host                   = data.aws_eks_cluster.eks.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.eks.token
 }
+
 
 provider "helm" {
   kubernetes = {
-    config_path = "~/.kube/config"
+    host                   = data.aws_eks_cluster.eks.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.eks.token
   }
 }
+
+
+# provider "kubernetes" {
+#   config_path = "~/.kube/config"
+# }
+
+# provider "helm" {
+#   kubernetes = {
+#     config_path = "~/.kube/config"
+#   }
+# }
 
 
 module "jenkins" {
@@ -102,3 +102,42 @@ module "argo_cd" {
   chart_version = "5.46.4"
 }
 
+module "rds" {
+  source = "./modules/rds"
+
+  name                       = "myapp-db"
+  use_aurora                 = false
+  aurora_instance_count      = 2
+  vpc_cidr_block        = "10.0.0.0/16"
+
+  # --- RDS-only ---
+  engine                     = var.rds_instance_engine
+  engine_version             = var.rds_instance_engine_version
+  parameter_group_family_rds = var.rds_instance_parameter_group_family
+
+  # Common
+  instance_class             = var.rds_instance_class
+  allocated_storage          = 20
+  db_name                    = var.rds_database_name
+  username                   = var.rds_username
+  password                   = var.rds_password
+  subnet_private_ids         = module.vpc.private_subnets
+  subnet_public_ids          = module.vpc.public_subnets
+  publicly_accessible        = var.rds_publicly_accessible
+  vpc_id                     = module.vpc.vpc_id
+  multi_az                   = var.rds_multi_az
+  backup_retention_period    = 0
+  parameters = {
+    max_connections              = "200"
+    log_min_duration_statement   = "500"
+  }
+
+  tags = {
+    Environment = "dev"
+    Project     = var.name
+  }
+
+  depends_on = [
+    module.vpc
+  ]
+} 

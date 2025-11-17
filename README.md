@@ -1,3 +1,25 @@
+# lesson 10 - RDS (PostgreSQL)
+
+## Опис
+
+Для зберігання даних Django-застосунок використовує Amazon RDS з PostgreSQL. Проєкт підтримує два варіанти розгортання бази даних:
+
+- Стандартний інстанс RDS PostgreSQL
+- Кластер Amazon Aurora PostgreSQL з одним writer та кількома reader репліками
+
+## Швидкий старт
+
+1. Встановіть змінну `use_aurora` в `true` або `false` в залежності від бажаного варіанту розгортання:
+
+```hcl
+variable "use_aurora" {
+  type    = bool
+  default = true # або false для стандартного RDS
+}
+```
+
+2. Ініціалізуйте Terraform
+
 # lesson 8-9 - Jenkins + ArgoCD
 
 ## Опис
